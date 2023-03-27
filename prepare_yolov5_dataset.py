@@ -36,6 +36,7 @@ def export_dataset_to(src_dataset, export_to_local_dir: str):
     src_dataset.take(0.1 * len(src_dataset)).tag_samples("val")
     src_dataset.match_tags("val", bool=False).tag_samples("train")
 
+    classes = src_dataset.distinct("ground_truth.detections.label")
     for split in splits:
         train_data_view = src_dataset.match_tags(split)
         train_data_view.export(
@@ -43,14 +44,26 @@ def export_dataset_to(src_dataset, export_to_local_dir: str):
             dataset_type=fo.types.YOLOv5Dataset,
             label_field="ground_truth",
             split=split,
+            classes=classes,
         )
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # the kitti dataset should follow this structure, otherwise the loaded dataset will be empty (and no error were shown) !!!
+    # <dataset_dir>/
+    # data/
+    #     <uuid1>.<ext>
+    #     <uuid2>.<ext>
+    #     ...
+    # labels/
+    #     <uuid1>.txt
+    #     <uuid2>.txt
+    #     ...
+
+    # you may see debug error like rm -rf ~/.fiftyone/
     src_dataset_local_path = "prepare_yolov5_dataset_from_kitti_format"
     dataset_name = "first_time1"
-    load_dataset = load_dataset_from_local_path(src_dataset_local_path, dataset_name,False)
+    load_dataset = load_dataset_from_local_path(src_dataset_local_path, dataset_name,True)
     print(load_dataset)
 
     target_export_dataset_local_path = "{}/fiftyone_convert_split_export".format(src_dataset_local_path)

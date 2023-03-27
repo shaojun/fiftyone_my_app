@@ -1,0 +1,5 @@
+names:
+- door_warning_sign
+nc: 1
+train: ./images/train/
+val: ./images/val/

@@ -1,0 +1,9 @@
+names:
+- bicycle
+- door_warning_sign
+- electric_bicycle
+- gastank
+- people
+nc: 5
+train: ./images/train/
+val: ./images/val/
