@@ -21,21 +21,26 @@ def getKeySampleFileNamesFromFilesInDir(dirPath):
     
     for group in allFilesGroupByFileName:
         if len(allFilesGroupByFileName[group]) == 1:
-            result.append(allFilesGroupByFileName[group][0])
+            pass
+            #result.append(allFilesGroupByFileName[group][0])
         if len(allFilesGroupByFileName[group]) == 2:
-            result.append(allFilesGroupByFileName[group][0])
-            result.append(allFilesGroupByFileName[group][1])
+            pass
+            #result.append(allFilesGroupByFileName[group][0])
+            #result.append(allFilesGroupByFileName[group][1])
         if len(allFilesGroupByFileName[group]) == 3:
             result.append(allFilesGroupByFileName[group][0])
-            result.append(allFilesGroupByFileName[group][-1])
+            #result.append(allFilesGroupByFileName[group][-1])
         if len(allFilesGroupByFileName[group]) > 3:
             result.append(allFilesGroupByFileName[group][0])
-            result.append(allFilesGroupByFileName[group][int(
-                len(allFilesGroupByFileName[group])/2)])
-            result.append(allFilesGroupByFileName[group][-1])
+            result.append(allFilesGroupByFileName[group][1])
+            result.append(allFilesGroupByFileName[group][2])
+            result.append(allFilesGroupByFileName[group][3])
+            #result.append(allFilesGroupByFileName[group][int(
+                #len(allFilesGroupByFileName[group])/2)])
+            #result.append(allFilesGroupByFileName[group][-1])
 
-    floor_confid = 0.12
-    ceiling_confid = 0.8
+    floor_confid = 0.01
+    ceiling_confid = 0.2
     removing_index = []
     for r in result:
         confid = float(r.split("___")[0])
@@ -53,17 +58,19 @@ def getKeySampleFileNamesFromFilesInDir(dirPath):
 if __name__ == '__main__':
     test_divide = int(3/2)
     test_divide = int(9/2)
-    base_dir = '/home/shawn/Downloads/'
-    output_dir = os.path.join(base_dir, "ebic_image_samples_output")
-    file_names = getKeySampleFileNamesFromFilesInDir(os.path.join(base_dir,"ebic_image_samples"))
+    base_dir = '/media/kevin/DATA1/shao/dataset/ebic_image_samples'
+    output_dir = os.path.join(base_dir, "selected_output")
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-    
-    for fn in file_names:
-        shutil.copyfile(os.path.join(os.path.join(base_dir,"ebic_image_samples"), fn),
-                        os.path.join(output_dir, fn))
+
+    for dir in os.listdir(base_dir):
+        file_names = getKeySampleFileNamesFromFilesInDir(os.path.join(base_dir,dir))
+
+        for fn in file_names:
+            shutil.copyfile(os.path.join(os.path.join(base_dir,dir), fn),
+                            os.path.join(output_dir, fn))
 
 
 def createDirIfNotExist(dirPath):
