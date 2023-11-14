@@ -1,7 +1,7 @@
 import fiftyone as fo
 import fiftyone.zoo as foz
 import fiftyone.brain as fob
-name = "people"
+name = "electric_bicycle"
 dataset_dir = "/home/shao/Downloads/test/electric_bicycle"
 # Create the dataset
 dataset = fo.Dataset.from_dir(
@@ -48,16 +48,19 @@ dups_tag_view = dataset.match_tags("duplicate")
 
 # Open view in App
 session.view = dups_tag_view
-wait = input("Press enter to continue.")
 
 from fiftyone import ViewField as F
 import os
+import shutil
 
 # Get samples that do not have the `duplicate` tag
 no_dups_view = dataset.match(~F("tags").contains("duplicate"))
 
+export_full_path = os.path.join(dataset_dir,'no_duplicated')
+if os.path.exists(export_full_path):
+    shutil.rmtree(export_full_path)
 # Export dataset to disk as a classification directory tree
 no_dups_view.export(
-    os.path.join(dataset_dir,'no_duplicated'),
+    export_full_path,
     dataset_type=fo.types.ImageDirectory,
 )
